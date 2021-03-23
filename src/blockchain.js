@@ -174,8 +174,13 @@ class Blockchain {
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
-            
+            for (const block in self.chain) {
+                const blockData=block.getBData()
+                if(blockData.owner===address){[...stars,blockData]}
+              }
+              resolve(stars)
         });
+      
     }
 
     /**
@@ -188,7 +193,16 @@ class Blockchain {
         let self = this;
         let errorLog = [];
         return new Promise(async (resolve, reject) => {
-            
+            let blockChain=self.chain;
+            for (const block in blockChain) {
+                
+                if(block.validate===false){
+                    console.log("Data didn't get validated");
+                }else if(block.previousBlockHash != (blockChain[block+1]).hash){
+                    console.log("error with previous blockhash");
+                    errorLog.push(`Invalid check previousBlockHash: ${(blockChain[block+1]) }`)
+                }
+              }
         });
     }
 
