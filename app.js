@@ -9,6 +9,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+
+   
 /**
  * Require the Blockchain class. This allow us to have only one instance of the class.
  */
@@ -39,6 +41,7 @@ class ApplicationServer {
 		this.app.use(morgan("dev"));
 		this.app.use(bodyParser.urlencoded({extended:true}));
 		this.app.use(bodyParser.json());
+		
 	}
 
 	initControllers() {

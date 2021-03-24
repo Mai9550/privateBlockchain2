@@ -11,6 +11,7 @@
 const SHA256 = require('crypto-js/sha256');
 const BlockClass = require('./block.js');
 const bitcoinMessage = require('bitcoinjs-message');
+const { Block } = require('../../../udacity_Create-Your-Own-Private-Blockchain-master/udacity_Create-Your-Own-Private-Blockchain-master/src/block.js');
 
 class Blockchain {
 
@@ -68,7 +69,7 @@ class Blockchain {
             block.height=this.chain.length;
             block.time=new Date().getTime().toString().slice(0,-3);
             if(this.chain.length>0){
-            block.previousBlockHash=this.chain[this.chain.lenght-1].hash;
+            block.previousBlockHash=this.chain[this.chain.length-1].hash;
             
             }
             block.hash=SHA256(JSON.stringify(block)).toString();
@@ -195,12 +196,13 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
             let blockChain=self.chain;
             for (const block in blockChain) {
-                
+                console.log(blockChain)
                 if(block.validate===false){
                     console.log("Data didn't get validated");
-                }else if(block.previousBlockHash != (blockChain[block+1]).hash){
+                }else if(block.previousBlockHash =this.chain[this.chain.length-1].hash){
                     console.log("error with previous blockhash");
-                    errorLog.push(`Invalid check previousBlockHash: ${(blockChain[block+1]) }`)
+                    errorLog.push(`Invalid check previousBlockHash: ${this.chain[this.chain.length-1] }`)
+                    console.log(errorLog)
                 }
               }
         });

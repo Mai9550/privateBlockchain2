@@ -5,6 +5,8 @@
  * This class expose the endpoints that the client applications will use to interact with the 
  * Blockchain dataset
  */
+ const bodyParser = require('body-parser');
+
 class BlockchainController {
 
     //The constructor receive the instance of the express.js app and the Blockchain class
@@ -18,7 +20,7 @@ class BlockchainController {
         this.getBlockByHash();
         this.getStarsByOwner();
     }
-
+   
     // Enpoint to Get a Block by Height (GET Endpoint)
     getBlockByHeight() {
         this.app.get("/block/height/:height", async (req, res) => {
@@ -41,6 +43,7 @@ class BlockchainController {
     requestOwnership() {
         this.app.post("/requestValidation", async (req, res) => {
             if(req.body.address) {
+                console.log(req.body)
                 const address = req.body.address;
                 const message = await this.blockchain.requestMessageOwnershipVerification(address);
                 if(message){
@@ -55,13 +58,17 @@ class BlockchainController {
     }
 
     // Endpoint that allow Submit a Star, yu need first to `requestOwnership` to have the message (POST endpoint)
+    
     submitStar() {
+        this.app.use(bodyParser.urlencoded({extended:false}));
+        this.app.use(bodyParser.json());
         this.app.post("/submitstar", async (req, res) => {
             if(req.body.address && req.body.message && req.body.signature && req.body.star) {
                 const address = req.body.address;
                 const message = req.body.message;
                 const signature = req.body.signature;
                 const star = req.body.star;
+                console.log(req.body)
                 try {
                     let block = await this.blockchain.submitStar(address, message, signature, star);
                     if(block){
